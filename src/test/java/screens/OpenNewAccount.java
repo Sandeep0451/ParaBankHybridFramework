@@ -14,7 +14,7 @@ public class OpenNewAccount {
     OpenNewAccountRepo newAccountRepo;
     String screenName = "OpenNewAccount";
     Map<String, String> rowData;
-    public String accountID;
+    public static String accountID;
 
     public OpenNewAccount(WebDriver driver) {
         this.newAccountRepo = new OpenNewAccountRepo(driver);

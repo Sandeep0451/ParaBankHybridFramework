@@ -43,6 +43,15 @@ public class Actions extends Base {
     public void selectData(String data, WebElement element){
         try {
             if(data.contains("validate")){
+                String[] tdata= data.split("=");
+                String[] mainData = tdata[1].split("\\|");
+                String eledata = element.getText();
+                if(mainData[0].equals(eledata)){
+                    System.out.println("Actual " +eledata+" and Expected "+ mainData[0]+" data is matched");
+                }else {
+                    System.out.println("Actual " +eledata+" and Expected "+ mainData[0]+" data is not matched");
+                }
+                
                 System.out.println("⚠️");
             }else if(!data.equals("N/A")){
                 wait.until(ExpectedConditions.visibilityOf(element));
