@@ -19,7 +19,7 @@ public class Runner {
     }
 
     @Test
-    public void test(){
+    public void test() throws InterruptedException {
         Regression_001 reg = new Regression_001(driver);
         reg.regressionMethod();
     }

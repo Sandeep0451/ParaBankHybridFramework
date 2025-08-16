@@ -1,5 +1,6 @@
 package objectRepo;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -47,6 +48,12 @@ public class RegisterRepo {
 
     @FindBy(xpath = "//input[@value='Register']")
     public WebElement btnRegister;
+
+
+    public WebElement successfullMessage(String value) {
+        String xpath = String.format("//h1[contains(text(),'"+value+"')]");
+        return driver.findElement(By.xpath(xpath));
+    }
 
     public RegisterRepo(WebDriver driver){
         this.driver = driver;

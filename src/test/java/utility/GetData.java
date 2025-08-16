@@ -8,6 +8,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -86,6 +87,16 @@ public class GetData {
         }
 
         return resultList;
+    }
+
+    public static String generateNumber(int digits) {
+        if (digits <= 0) {
+            throw new IllegalArgumentException("Digits must be greater than 0");
+        }
+        SecureRandom random = new SecureRandom();
+        int max = (int) Math.pow(10, digits);
+        int number = random.nextInt(max);
+        return String.format("%0" + digits + "d", number);
     }
 
 }

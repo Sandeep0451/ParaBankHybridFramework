@@ -14,7 +14,8 @@ public class Register {
     RegisterRepo register;
     String screenName = "Register";
     Map<String, String> rowData;
-
+    String randomDigit;
+    public String randomUserName;
 
     public Register(WebDriver driver) {
         this.register = new RegisterRepo(driver);
@@ -39,10 +40,18 @@ public class Register {
             actions.sendKeysOrValidate(rowData.get("TXT_ZipCode"), register.txtZip);
             actions.sendKeysOrValidate(rowData.get("TXT_PhoneNumber"), register.txtPhoneNumber);
             actions.sendKeysOrValidate(rowData.get("TXT_SSN"), register.txtSSN);
-            actions.sendKeysOrValidate(rowData.get("TXT_Username"), register.txtUserName);
+            randomUserName = rowData.get("TXT_Username")+GetData.generateNumber(4);
+            actions.sendKeysOrValidate(randomUserName, register.txtUserName);
             actions.sendKeysOrValidate(rowData.get("TXT_Password"), register.txtPassword);
             actions.sendKeysOrValidate(rowData.get("TXT_Confirm"), register.txtConfirmPassword);
             actions.click(register.btnRegister);
+            if(actions.verifyElement(register.successfullMessage(randomUserName))){
+                System.out.println("Registration is successfully");
+            }else {
+                System.out.println("Registration is Unsuccessfully");
+            }
+
+
 
             iteration++;
         }
