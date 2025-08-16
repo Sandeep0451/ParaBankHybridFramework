@@ -6,7 +6,7 @@ import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 import regressions.Regression_001;
 
-public class Runners {
+public class Runner {
 
     WebDriver driver;
 
