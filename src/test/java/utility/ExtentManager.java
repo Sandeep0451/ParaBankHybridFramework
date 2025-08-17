@@ -2,6 +2,10 @@ package utility;
 
 import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.reporter.ExtentSparkReporter;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
+
+import static utility.Base.driver;
 
 
 public class ExtentManager {
@@ -21,5 +25,9 @@ public class ExtentManager {
             extent.setSystemInfo("Environment", "QA");
         }
         return extent;
+    }
+
+    public String takeScreenshotAsBase64() {
+        return ((TakesScreenshot) driver).getScreenshotAs(OutputType.BASE64);
     }
 }

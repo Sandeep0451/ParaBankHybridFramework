@@ -17,6 +17,7 @@ public class Runner {
 
     @BeforeTest
     public void creationOfWebDriver(){
+        test = extent.createTest("ParaBank Basic Scenario");
         extent = ExtentManager.getInstance();
         driver = new ChromeDriver();
         driver.get("https://parabank.parasoft.com/parabank/index.htm");
