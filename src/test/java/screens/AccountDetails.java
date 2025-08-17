@@ -21,7 +21,6 @@ public class AccountDetails {
         this.accountDetails = new AccountDetailsRepo(driver);
         actions = new Actions(driver);
     }
-
     public void accountDetailsScreen(String testCaseName, String transaction) throws InterruptedException {
         List<Map<String, String>> testData = GetData.getDataForTestCase(screenName, testCaseName,transaction);
         int iteration=0;
