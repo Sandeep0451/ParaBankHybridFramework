@@ -22,9 +22,11 @@ public class Actions extends Base {
                 wait.until(ExpectedConditions.elementToBeClickable(element));
                 element.clear();
                 element.sendKeys(data);
+                test.pass("Sendkeys to element: " + element.toString());
+
             }
         } catch (Exception e) {
-            System.out.println("⚠️ Warning: Could not clear or send keys to element: " + e.getMessage());
+            test.warning("⚠️ Warning: Could not clear or send keys to element: " + e.getMessage());
         }
     }
 
@@ -33,9 +35,10 @@ public class Actions extends Base {
             wait.until(ExpectedConditions.visibilityOf(element));
             wait.until(ExpectedConditions.elementToBeClickable(element));
             element.click();
+            test.pass("Clicked on element: " + element.toString());
         }
         catch (Exception e){
-            System.out.println("⚠️ Warning: Could not click element: " + e.getMessage());
+            test.warning("Could not click element: " + e.getMessage());
 
         }
     }
@@ -47,9 +50,9 @@ public class Actions extends Base {
                 String[] mainData = tdata[1].split("\\|");
                 String eledata = element.getText();
                 if(mainData[0].equals(eledata)){
-                    System.out.println("Actual " +eledata+" and Expected "+ mainData[0]+" data is matched");
+                    test.pass("Actual " +eledata+" and Expected "+ mainData[0]+" data is matched");
                 }else {
-                    System.out.println("Actual " +eledata+" and Expected "+ mainData[0]+" data is not matched");
+                    test.warning("Actual " +eledata+" and Expected "+ mainData[0]+" data is not matched");
                 }
                 
                 System.out.println("⚠️");
@@ -59,20 +62,21 @@ public class Actions extends Base {
 
                 Select dropdown = new Select(element);
                 dropdown.selectByVisibleText(data);
-
+                test.pass("Selected value :"+data+ " from dropdown element :"+element.toString());
             }
         } catch (Exception e) {
-            System.out.println("⚠️ Warning: Could not clear or send keys to element: " + e.getMessage());
+            test.warning("⚠️ Warning: Could not clear or send keys to element: " + e.getMessage());
         }
     }
 
     public boolean verifyElement(WebElement element){
         try {
             wait.until(ExpectedConditions.visibilityOf(element));
+            test.pass("Element :"+element.toString()+"is present at desired location");
             return true;
         }
         catch (Exception e){
-            System.out.println("⚠️ Warning: element is not present on UI " + e.getMessage());
+            test.warning("⚠️ Warning: element is not present on UI " + e.getMessage());
 
         }
         return false;
@@ -86,9 +90,10 @@ public class Actions extends Base {
             wait.until(ExpectedConditions.elementToBeClickable(element));
 
             text =  element.getText();
+            test.pass("Get text of element :"+element.toString()+"is success");
         }
         catch (Exception e){
-            System.out.println("⚠️ Warning: element is not present on UI " + e.getMessage());
+            test.warning("⚠️ Warning: element is not present on UI " + e.getMessage());
 
         }
         return text;
