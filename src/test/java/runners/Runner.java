@@ -2,10 +2,7 @@ package runners;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.testng.annotations.AfterTest;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.BeforeTest;
-import org.testng.annotations.Test;
+import org.testng.annotations.*;
 import regressions.Regression_001;
 import regressions.Regression_002;
 import utility.Base;
@@ -42,6 +39,11 @@ public class Runner extends Base {
         Base.createTest("Random Parabank test");
         Regression_002 reg = new Regression_002(driver);
         reg.regressionMethod();
+    }
+
+    @AfterMethod
+    public void close(){
+        Base.driver.quit();
     }
 
     @AfterTest
