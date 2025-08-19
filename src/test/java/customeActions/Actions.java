@@ -16,8 +16,13 @@ public class Actions extends Base {
     public void sendKeysOrValidate(String data, WebElement element){
         try {
             if(data.contains("validate")){
-                System.out.println("⚠️");
-            }else{
+                String[] str = data.split("=");
+                if(element.getAttribute("value").equals(str[0])){
+                    test.pass("Expected data : "+ str[0]+" and actual data : " + element.getAttribute("value") +" are equal");
+                }else{
+                    test.warning("⚠️ Warning: Expected data : "+ str[0]+" and actual data : " + element.getAttribute("value") +" are not equal");
+                }
+            }else if(!data.equals("N/A")){
                 wait.until(ExpectedConditions.visibilityOf(element));
                 wait.until(ExpectedConditions.elementToBeClickable(element));
                 element.clear();
