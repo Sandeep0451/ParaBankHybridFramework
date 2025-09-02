@@ -1,18 +1,12 @@
 package utility;
 
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.security.SecureRandom;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class GetData {
 
@@ -68,7 +62,7 @@ public class GetData {
                 String transValue = transactionCell.getStringCellValue().trim();
 
                 if (tcName.equalsIgnoreCase(testCaseName) && transValue.equalsIgnoreCase(transaction)) {
-                    Map<String, String> dataMap = new HashMap<>();
+                    Map<String, String> dataMap = new LinkedHashMap<>();
 
                     // extract all column data for this row
                     for (int j = 0; j < totalColumns; j++) {
@@ -98,5 +92,116 @@ public class GetData {
         int number = random.nextInt(max);
         return String.format("%0" + digits + "d", number);
     }
+
+
+
+    public static List<String> getRegressionIDs() {
+        List<String> regressionIds = new ArrayList<>();
+
+        try (FileInputStream fis = new FileInputStream(filePath);
+             Workbook workbook = new XSSFWorkbook(fis)) {
+
+            // Get the sheet "Regressions"
+            Sheet sheet = workbook.getSheet("Regressions");
+            if (sheet == null) {
+                throw new RuntimeException("Sheet 'Regressions' not found in file: " + filePath);
+            }
+
+            // Get header row (first row)
+            Row headerRow = sheet.getRow(0);
+            if (headerRow == null) {
+                throw new RuntimeException("Header row missing in sheet 'Regressions'");
+            }
+
+            // Find column index of "RegressionID"
+            int regressionIdColIndex = -1;
+            for (Cell cell : headerRow) {
+                if (cell.getStringCellValue().trim().equalsIgnoreCase("RegressionID")) {
+                    regressionIdColIndex = cell.getColumnIndex();
+                    break;
+                }
+            }
+
+            if (regressionIdColIndex == -1) {
+                throw new RuntimeException("Column 'RegressionID' not found in sheet 'Regressions'");
+            }
+
+            // Iterate over rows and get values from RegressionID column
+            Iterator<Row> rowIterator = sheet.iterator();
+            rowIterator.next(); // skip header row
+
+            while (rowIterator.hasNext()) {
+                Row row = rowIterator.next();
+                Cell cell = row.getCell(regressionIdColIndex);
+
+                if (cell != null) {
+                    String value = cell.toString().trim();
+                    if (!value.isEmpty()) {
+                        regressionIds.add(value);
+                    }
+                }
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return regressionIds;
+    }
+
+    public static List<String> readRowData( String sheetName, int rowNumber) {
+        List<String> rowData = new ArrayList<>();
+
+        try (FileInputStream fis = new FileInputStream(filePath);
+             Workbook workbook = new XSSFWorkbook(fis)) {
+
+            Sheet sheet = workbook.getSheet(sheetName);
+            if (sheet == null) {
+                throw new RuntimeException("Sheet " + sheetName + " not found in " + filePath);
+            }
+
+            Row row = sheet.getRow(rowNumber);
+            if (row == null) {
+                throw new RuntimeException("Row " + rowNumber + " not found in sheet " + sheetName);
+            }
+
+            Iterator<Cell> cellIterator = row.cellIterator();
+            while (cellIterator.hasNext()) {
+                Cell cell = cellIterator.next();
+                rowData.add(getCellValueAsString(cell));
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return rowData;
+    }
+
+    private static String getCellValueAsString(Cell cell) {
+        if (cell == null) {
+            return "";
+        }
+
+        switch (cell.getCellType()) {
+            case STRING:
+                return cell.getStringCellValue().trim();
+            case NUMERIC:
+                if (DateUtil.isCellDateFormatted(cell)) {
+                    return cell.getDateCellValue().toString();
+                } else {
+                    return String.valueOf(cell.getNumericCellValue());
+                }
+            case BOOLEAN:
+                return String.valueOf(cell.getBooleanCellValue());
+            case FORMULA:
+                return cell.getCellFormula();
+            case BLANK:
+                return "";
+            default:
+                return "";
+        }
+    }
+
+
 
 }
